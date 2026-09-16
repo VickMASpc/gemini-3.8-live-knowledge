@@ -1,0 +1,21 @@
+{
+  "name": "gemini-3-8-live-knowledge-examples",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "voice": "tsx src/voice-session.ts",
+    "tools": "tsx src/tool-session.ts"
+  },
+  "dependencies": {
+    "@google/genai": "^2.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  }
+}

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A browser-only Gemini Live workspace with local notes and personalization.">
+  <meta name="theme-color" content="#071426">
+  <title>Gemini Live Workspace</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23071426'/%3E%3Cpath d='M16 7v18M10 12v8M22 12v8' stroke='%2337d79b' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Workspace navigation">
+      <a class="brand" href="#console" aria-label="Gemini Live Workspace home"><span class="brand-mark" aria-hidden="true"></span><span>Gemini Live Workspace</span></a>
+      <nav class="nav-list">
+        <a class="nav-item active" href="#console" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"/><path d="M5 11v1a7 7 0 0 0 14 0v-1M12 19v3M8 22h8"/></svg>Live console</a>
+        <a class="nav-item" href="#settings"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 2l.07.07-2.76 2.76-.07-.07a1.8 1.8 0 0 0-2-.36 1.8 1.8 0 0 0-1 1.64V21h-4v-.1a1.8 1.8 0 0 0-1-1.64 1.8 1.8 0 0 0-2 .36l-.07.07-2.76-2.76.07-.07a1.8 1.8 0 0 0 .36-2 1.8 1.8 0 0 0-1.64-1H3v-4h.1a1.8 1.8 0 0 0 1.64-1 1.8 1.8 0 0 0-.36-2l-.07-.07 2.76-2.76.07.07a1.8 1.8 0 0 0 2 .36 1.8 1.8 0 0 0 1-1.64V3h4v.1a1.8 1.8 0 0 0 1 1.64 1.8 1.8 0 0 0 2-.36l.07-.07 2.76 2.76-.07.07a1.8 1.8 0 0 0-.36 2 1.8 1.8 0 0 0 1.64 1H21v4h-.1A1.8 1.8 0 0 0 19.4 15Z"/></svg>Settings</a>
+        <a class="nav-item" href="#notes"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 3h10l4 4v14H5z"/><path d="M15 3v5h5M8 12h8M8 16h8"/></svg>Notes</a>
+      </nav>
+      <p class="sidebar-note">Static-friendly workspace<br>Gemini Live · JavaScript</p>
+    </aside>
+    <main class="workspace" id="console">
+      <header class="topbar"><div><h1>Live workspace</h1><p>Talk, type, save notes, and make the assistant yours.</p></div><div class="connection-state" id="connectionState" data-state="disconnected" role="status" aria-live="polite"><span class="state-dot" aria-hidden="true"></span><span id="connectionLabel">Disconnected</span></div></header>
+      <section class="console-grid" aria-label="Gemini Live workspace">
+        <section class="stage" aria-labelledby="stageTitle">
+          <div class="voice-visual" id="voiceVisual" data-state="idle" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="stage-copy"><h2 id="stageTitle">Ready to connect</h2><p id="stageDescription">Add your key in Settings, then start a live session.</p></div>
+          <div class="primary-controls"><button class="button primary" id="startButton" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7V5Z"/></svg>Start session</button><button class="button secondary" id="muteButton" type="button" disabled aria-pressed="false"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"/><path d="M5 11v1a7 7 0 0 0 14 0v-1M12 19v3M8 22h8"/></svg><span>Mute</span></button><button class="button danger" id="endButton" type="button" disabled><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1"/></svg>End session</button></div>
+          <form class="instruction-composer" id="instructionForm"><label for="instructionInput">Send a message</label><div><input id="instructionInput" autocomplete="off" maxlength="1200" placeholder="Try: Make a note to call Ana tomorrow" disabled><button class="button compact" id="sendInstructionButton" type="submit" disabled>Send</button></div><p>Use your voice or send text. The assistant can save notes and update its personalization in this browser.</p></form>
+        </section>
+        <aside class="settings" id="settings" aria-labelledby="settingsTitle">
+          <h2 id="settingsTitle">Connection &amp; preferences</h2>
+          <section class="settings-section api-section" aria-labelledby="apiKeyTitle"><h3 id="apiKeyTitle">Gemini API key</h3><label class="field"><span>Key</span><span class="secret-input"><input id="apiKeyInput" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your own key"><button id="showKeyButton" type="button" aria-label="Show API key">Show</button></span></label><label class="check-row"><input id="rememberKeyToggle" type="checkbox"><span>Keep this key in this browser</span></label><p class="field-help">A static site cannot protect a key. Use a restricted key you control; leaving this off clears it when the tab closes.</p></section>
+          <section class="settings-section" aria-labelledby="personalTitle"><h3 id="personalTitle">Personalize</h3><label class="field"><span>Your name</span><input id="profileNameInput" maxlength="80" placeholder="How should Gemini address you?"></label><label class="field"><span>About you</span><textarea id="profileContextInput" maxlength="900" rows="3" placeholder="Goals, preferences, ongoing projects…"></textarea></label><label class="field"><span>Response style</span><select id="responseStyleSelect"><option value="concise">Concise</option><option value="balanced">Balanced</option><option value="detailed">Detailed</option></select></label><button class="text-button save-button" id="savePreferencesButton" type="button">Save preferences</button></section>
+          <section class="settings-section session-section" aria-labelledby="sessionTitle"><h3 id="sessionTitle">Session</h3><label class="field"><span>Model</span><input id="modelInput" maxlength="120" value="gemini-3.8-live" spellcheck="false"></label><label class="field"><span>Voice</span><select id="voiceSelect"><option value="Kore">Kore — firm</option><option value="Aoede">Aoede — breezy</option><option value="Puck">Puck — upbeat</option><option value="Charon">Charon — informative</option><option value="Sulafat">Sulafat — warm</option></select></label><label class="switch-row"><span><strong>Input transcription</strong><small>Show what you say</small></span><input id="inputTranscriptToggle" type="checkbox" checked><span class="switch" aria-hidden="true"></span></label><label class="switch-row"><span><strong>Output transcription</strong><small>Show what Gemini says</small></span><input id="outputTranscriptToggle" type="checkbox" checked><span class="switch" aria-hidden="true"></span></label><label class="switch-row"><span><strong>Automatic VAD</strong><small>Detect speech boundaries</small></span><input id="vadToggle" type="checkbox" checked><span class="switch" aria-hidden="true"></span></label></section>
+        </aside>
+      </section>
+      <section class="data-grid"><section class="data-panel" aria-labelledby="transcriptTitle"><header class="panel-header"><div><h2 id="transcriptTitle">Transcript</h2><p>Finalized messages from you and Gemini</p></div><button class="text-button" id="clearTranscriptButton" type="button">Clear</button></header><ol class="transcript-list" id="transcriptList" aria-live="polite"><li class="empty-state">No transcript yet. Start a session to begin.</li></ol></section><section class="data-panel" aria-labelledby="eventTitle"><header class="panel-header"><div><h2 id="eventTitle">Activity</h2><p>Connection, tools, and local actions</p></div><button class="text-button" id="clearEventsButton" type="button">Clear</button></header><ol class="event-list" id="eventList" aria-live="polite"><li><time>—</time><code class="event-system">[system]</code><span>Workspace ready</span></li></ol></section></section>
+      <section class="notes-panel" id="notes" aria-labelledby="notesTitle"><header class="panel-header"><div><h2 id="notesTitle">My notes</h2><p>Stored only in this browser. Ask Gemini to “make a note” or add one below.</p></div><button class="text-button" id="clearNotesButton" type="button">Clear notes</button></header><form class="note-form" id="noteForm"><input id="noteTitleInput" maxlength="120" placeholder="Note title" aria-label="Note title"><textarea id="noteBodyInput" maxlength="1800" rows="2" placeholder="Write a note…" aria-label="Note body"></textarea><button class="button compact" type="submit">Save note</button></form><ol class="notes-list" id="notesList"><li class="empty-state">No notes yet.</li></ol></section>
+      <footer class="statusbar"><span id="modeSummary">Browser-only · no server or build step</span><span>Microphone audio goes directly to Google after you connect</span></footer>
+    </main>
+  </div>
+  <template id="transcriptTemplate"><li class="transcript-item"><span class="speaker-avatar" aria-hidden="true"></span><div><strong></strong><p></p></div><time></time></li></template>
+  <template id="noteTemplate"><li class="note-item"><div><strong></strong><p></p><time></time></div><button type="button" aria-label="Delete note">Delete</button></li></template>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
