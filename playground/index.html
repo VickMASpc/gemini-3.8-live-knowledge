@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#191919" />
+  <meta name="description" content="Pixel-focused Gemini Live Playground recreation." />
+  <link rel="stylesheet" href="./src/style.css" />
+  <title>Playground · Gemini Live</title>
+</head>
+<body>
+  <div id="app" class="app">
+    <header class="header">
+      <div class="header-brand">
+        <button class="head-icon" id="menu-button" title="Menu" aria-label="Open menu"><i data-icon="menu"></i></button>
+        <span>Playground</span>
+      </div>
+      <button class="head-icon" id="settings-button" title="Run settings" aria-label="Open run settings"><i data-icon="sliders-horizontal"></i></button>
+    </header>
+
+    <main id="conversation" class="conversation">
+      <section id="welcome" class="welcome">
+        <h1>Talk with Gemini 3.8<br /><span>Live Extended Thinking</span></h1>
+        <p class="intro-subtitle">Real-time voice and video. Talk, share your camera, or share your screen.</p>
+        <div class="suggestions">
+          <button data-suggest="Let's practice a conversation.">Practice a conversation</button>
+          <button data-suggest="Help me rehearse a presentation.">Rehearse a presentation</button>
+          <button data-suggest="Walk me through what is on my screen.">Walk me through what is on my screen</button>
+        </div>
+        <div class="promo-card" title="Explore what you see"><img src="./intro-preview.webp" alt="Gemini Live example: conversation over a map" /></div>
+      </section>
+      <div id="messages" class="messages" aria-live="polite"></div>
+    </main>
+
+    <div class="bottom-stack">
+      <div id="session-status" class="session-status" hidden><span class="status-line"></span><span id="status-text">Connecting to server...</span><button id="close-stream" title="Disconnect" aria-label="Disconnect"><i data-icon="x"></i></button><span class="status-line"></span></div>
+      <div id="media-preview" class="media-preview" hidden><video id="preview-video" autoplay playsinline muted></video><span id="media-label">Camera live</span><button id="stop-media" aria-label="Stop video"><i data-icon="x"></i></button></div>
+      <form id="composer" class="composer">
+        <textarea id="prompt" rows="2" placeholder="Start typing a prompt" aria-label="Prompt"></textarea>
+        <div class="composer-controls">
+          <div class="control-left">
+            <button class="round subtle-outline" type="button" id="add-button" aria-label="Add image" title="Add image"><i data-icon="plus-circle"></i></button>
+            <button class="round" type="button" id="visibility-button" aria-label="Hide media preview" title="Show/hide video preview"><i data-icon="eye-off"></i></button>
+            <button class="round" type="button" id="tools-button" aria-label="Tools" title="Tools"><i data-icon="blocks"></i></button>
+          </div>
+          <div class="control-right">
+            <button class="round" type="button" id="mic-button" aria-label="Microphone" title="Toggle microphone"><i data-icon="mic"></i></button>
+            <div class="camera-anchor">
+              <button class="round" type="button" id="camera-button" aria-label="Camera and screen sharing" title="Camera and screen sharing"><i data-icon="video"></i></button>
+              <div id="camera-menu" class="camera-menu floating-menu" hidden></div>
+            </div>
+            <button class="run-button" type="submit" id="run-button">Run</button>
+          </div>
+        </div>
+        <input type="file" id="image-input" accept="image/png,image/jpeg,image/webp" hidden />
+      </form>
+    </div>
+
+    <div id="scrim" class="scrim" hidden></div>
+    <aside id="settings-panel" class="settings-panel" aria-label="Run settings" aria-hidden="true">
+      <div class="drawer-top"><span>Run settings</span><button id="get-code" class="drawer-code" title="Get code"><i data-icon="code"></i><span>Get code</span></button><button id="auth-shortcut" class="bare-icon" title="Connect API key"><i data-icon="key-round"></i></button><button id="settings-close" class="bare-icon" title="Close settings"><i data-icon="x"></i></button></div>
+      <div class="drawer-scroll">
+        <div class="model-switcher" id="model-switcher"><button class="model-card selected" data-model="gemini-3.8-live-extended-thinking"><strong id="model-title">Gemini 3.8 Live Extended Thinking</strong><small id="model-code">gemini-3.8-live-extended-thinking</small><span id="model-description">Our high-precision audio model engineered for complex tasks, capable of in-depth reasoning while speaking with natural verbal cues.</span><i data-icon="chevron-down"></i></button><div id="model-list" class="model-options" hidden><button class="model-option" data-model="gemini-3.8-live">Gemini 3.8 Live<small>Real-time dialogue · low latency</small></button><button class="model-option" data-model="gemini-3.8-live-extended-thinking">Gemini 3.8 Live Extended Thinking<small>Background reasoning · complex tasks</small></button></div></div>
+        <label class="system-box"><span>System instructions</span><textarea id="system-instructions" rows="2" placeholder="Optional tone and style instructions for the model"></textarea></label>
+        <div class="settings-divider"></div>
+        <section class="setting-block"><label class="setting-label" for="voice-button">Voice</label><div class="select-anchor"><button class="select-button voice-button" id="voice-button" type="button"><i data-icon="audio-lines"></i><span id="voice-value">Zephyr</span><i data-icon="chevron-down"></i></button><div id="voice-menu" class="floating-menu voice-menu" hidden></div></div></section>
+        <section class="setting-block"><label class="setting-label" for="resolution-button">Media resolution</label><div class="select-anchor"><button class="select-button" id="resolution-button" type="button"><span id="resolution-value">Medium (258 tokens / image)</span><i data-icon="chevron-down"></i></button><div id="resolution-menu" class="floating-menu option-menu" hidden></div></div></section>
+        <section class="setting-block" id="thinking-section"><label class="setting-label" for="thinking-button">Thinking level</label><div class="select-anchor"><button class="select-button" id="thinking-button" type="button"><span id="thinking-value">Low</span><i data-icon="chevron-down"></i></button><div id="thinking-menu" class="floating-menu option-menu" hidden></div></div></section>
+        <div class="settings-divider"></div>
+        <section class="settings-section"><button class="section-heading" id="context-collapse"><span>Session Context</span><i data-icon="chevron-up"></i></button><div id="context-content"><label class="slider-label" for="max-context">Max context size</label><div class="slider-row"><input id="max-context" type="range" min="16384" max="131072" step="1" value="104857" /><output id="max-context-value">104857</output></div><label class="slider-label" for="target-context">Target context size</label><div class="slider-row"><input id="target-context" type="range" min="2048" max="104857" step="1" value="52428" /><output id="target-context-value">52428</output></div></div></section>
+        <div class="settings-divider"></div>
+        <section class="settings-section tools-section"><button class="section-heading" id="tools-collapse"><span>Tools</span><i data-icon="chevron-up"></i></button><div id="tools-content">
+          <div class="toggle-row"><label for="function-toggle">Function calling</label><button id="edit-functions" class="small-text" title="Edit function definitions">Edit</button><input id="function-toggle" type="checkbox" role="switch" class="toggle" /></div>
+          <div class="toggle-row"><label for="auto-function-toggle">Automatic Function Response</label><input id="auto-function-toggle" type="checkbox" role="switch" class="toggle" /></div>
+          <div class="toggle-row"><label for="search-toggle">Grounding with Google Search</label><input id="search-toggle" type="checkbox" role="switch" class="toggle" /></div>
+        </div></section>
+      </div>
+    </aside>
+
+    <aside id="side-nav" class="side-nav" aria-hidden="true"><div class="nav-title">Playground <button class="bare-icon" id="nav-close"><i data-icon="x"></i></button></div><button id="nav-new"><i data-icon="plus"></i> New session</button><button id="nav-settings"><i data-icon="sliders-horizontal"></i> Run settings</button><button id="nav-key"><i data-icon="key-round"></i> API connection</button><a href="https://ai.google.dev/gemini-api/docs/live-api" target="_blank" rel="noreferrer"><i data-icon="book-open"></i> Live API documentation</a></aside>
+
+    <div id="modal-backdrop" class="modal-backdrop" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-heading"><h2 id="modal-title">Connection</h2><button id="modal-close" class="bare-icon" aria-label="Close"><i data-icon="x"></i></button></div><div id="modal-content"></div></section></div>
+    <div id="toast" class="toast" role="status" hidden></div>
+  </div>
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
