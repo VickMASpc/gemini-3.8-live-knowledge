@@ -8,12 +8,17 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+  pages: write
+  id-token: write
 concurrency:
   group: publish-playground
   cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -40,3 +45,10 @@ jobs:
             git commit -m "Publish Gemini Live Playground built assets"
             git push origin HEAD:main
           fi
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: playground/dist
+      - name: Deploy directly to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
